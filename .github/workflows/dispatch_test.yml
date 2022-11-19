@@ -1,0 +1,13 @@
+name: General Tester
+on:
+  workflow_dispatch:
+  
+jobs:
+  checkout-twice:
+    name: Double Checkout
+    runs-on: windows-latest
+    steps:
+    - name: Checkout Master 1
+      uses: actions/checkout@v3
+    - name: Checkout Master 2
+      uses: actions/checkout@v3
