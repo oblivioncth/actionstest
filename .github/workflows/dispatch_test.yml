@@ -8,4 +8,4 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Same ref test
-      uses: oblivioncth/actions/test/outer@bff067f7975a0a304324ba1c969459c5b9deb37d
+      uses: oblivioncth/actions/test/outer@f1386ed8631156446bda54b6af2b60d068621e22
