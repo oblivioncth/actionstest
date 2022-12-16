@@ -3,11 +3,9 @@ on:
   workflow_dispatch:
   
 jobs:
-  checkout-twice:
-    name: Double Checkout
+  composite-test:
+    name: Test nested composite reference
     runs-on: windows-latest
     steps:
-    - name: Checkout Master 1
-      uses: actions/checkout@v3
-    - name: Checkout Master 2
-      uses: actions/checkout@v3
+    - name: Same ref test
+      uses: oblivioncth/actions/test/outer@bff067f7975a0a304324ba1c969459c5b9deb37d
