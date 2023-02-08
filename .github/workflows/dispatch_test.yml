@@ -3,9 +3,18 @@ on:
   workflow_dispatch:
   
 jobs:
-  composite-test:
-    name: Test nested composite reference
-    runs-on: windows-latest
+  create_artifacts:
+    name: Generate Artifacts
+    uses: ./.github/workflows/artifact_maker.yml
+  download_all_artifacts:
+    name: Download & Check Artifacts
+    needs: [create_artifacts]
+    runs-on: ubuntu-latest
     steps:
-    - name: Same ref test
-      uses: oblivioncth/actions/test/outer@f1386ed8631156446bda54b6af2b60d068621e22
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: ./artifact_dump
+    - name: List artifact contents
+      run: |
+        ls -R

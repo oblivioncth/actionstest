@@ -1,0 +1,35 @@
+name: Generate artifact
+on:
+  workflow_call:
+
+jobs:
+  make_artifacts:
+    name: Generate artifacts
+    runs-on: ubuntu-latest
+    steps:
+    - name: Create files
+      run: |
+        mkdir "One"
+        mkdir "Two"
+        mkdir "Three"
+        touch ./One/one.txt
+        touch ./Two/two.txt
+        touch ./Three/three.txt
+    - name: Upload one
+      uses: actions/upload-artifact@v3
+      with:
+        name: One
+        path: ${{ github.workspace }}/One
+        if-no-files-found: error
+    - name: Upload two
+      uses: actions/upload-artifact@v3
+      with: 
+        name: Two
+        path: ${{ github.workspace }}/Two
+        if-no-files-found: error
+    - name: Upload three
+      uses: actions/upload-artifact@v3
+      with:
+        name: Three
+        path: ${{ github.workspace }}/Three
+        if-no-files-found: error
