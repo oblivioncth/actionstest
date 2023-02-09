@@ -5,34 +5,28 @@ env:
   zip_dir: ${{ github.workspace }}/zips
  
 jobs:
-  create_artifacts:
-    name: Generate Artifacts
-    uses: ./.github/workflows/artifact_maker.yml
-  prepare_all_artifacts:
-    name: Download & Check Artifacts
-    needs: [create_artifacts]
-    runs-on: ubuntu-latest
+  do_matrix:
+    name: Matrix
+    strategy:
+      matrix:
+        var: [one, two, three]
+    runs-on: windows-latest
+    outputs:
+      test_output: ${{ steps.set_output.outputs.outty }}
     steps:
-    - name: Download all artifacts
-      uses: actions/download-artifact@v3
-      with:
-        path: ./artifact_dump
-    - name: Zip artifacts
-      shell: pwsh
-      run: |
-        $folders = Get-ChildItem -Directory -Path "${{ github.workspace }}/artifact_dump"
-        foreach($dir in $folders)
-        {
-          $name = $dir.name
-          $path = $dir.fullname
-          7z a "${{ env.zip_dir }}/${name}.zip" "${path}/*"
-        }
-    - name: Generate release
-      uses: softprops/action-gh-release@v1
-      with:
-        name: "Test Release"
-        tag_name: test_tag
-        fail_on_unmatched_files: true
-        files: |
-          ${{ env.zip_dir }}/*.zip
-        
+    - name: Echo
+      run: echo ${{ matrix.var }}
+    - name: Set output
+      id: set_output
+      if: matrix.var == 'two'
+      run: echo "outty=Hi" >> $Env:GITHUB_OUTPUT
+      
+  check_output:
+    name: Check output
+    needs: [do_matrix]
+    runs-on: windows-latest
+    steps:
+    - name: Print output
+      run: echo "${{ needs.do_matrix.outputs.test_output }}"
+    
+  
